@@ -44,9 +44,9 @@
                 <Label Content="q:" Grid.Row="1" Grid.Column="0"/>
                 <Label Content="b:" Grid.Row="2" Grid.Column="0"/>
                 
-                <TextBox MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" x:Name="keyBox1" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="0" Grid.Column="1"/>
-                <TextBox MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" x:Name="keyBox2" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="1" Grid.Column="1"/>
-                <TextBox MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" x:Name="keyBox3" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="2" Grid.Column="1"/>
+                <TextBox x:Name="pBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="0" Grid.Column="1"/>
+                <TextBox x:Name="qBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="1" Grid.Column="1"/>
+                <TextBox x:Name="bBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="2" Grid.Column="1"/>
             </Grid>
         </DockPanel>
 
