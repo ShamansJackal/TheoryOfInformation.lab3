@@ -7,9 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using TheoryOfInformation.lab2.Encryptions.Models;
+using TheoryOfInformation.lab3.Encryptions.Models;
 
-namespace TheoryOfInformation.lab2
+namespace TheoryOfInformation.lab3
 {
     /// <summary>
     /// Логика взаимодействия для FileWindow.xaml

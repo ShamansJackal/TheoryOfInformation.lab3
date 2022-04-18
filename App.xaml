@@ -1,7 +1,7 @@
-﻿<Application x:Class="TheoryOfInformation.lab2.App"
+﻿<Application x:Class="TheoryOfInformation.lab3.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TheoryOfInformation.lab2"
+             xmlns:local="clr-namespace:TheoryOfInformation.lab3"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

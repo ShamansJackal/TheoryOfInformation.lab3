@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace TheoryOfInformation.lab2
+namespace TheoryOfInformation.lab3
 {
     /// <summary>
     /// Логика взаимодействия для ReportWindow.xaml
