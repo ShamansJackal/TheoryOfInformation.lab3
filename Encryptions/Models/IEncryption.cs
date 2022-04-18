@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace TheoryOfInformation.lab2.Encryptions.Models
+namespace TheoryOfInformation.lab3.Encryptions.Models
 {
     public interface IEncryption
     {
