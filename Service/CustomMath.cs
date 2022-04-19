@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheoryOfInformation.lab1.Service
+namespace TheoryOfInformation.lab3.Service
 {
     public static class CustomMath
     {
@@ -20,24 +21,80 @@ namespace TheoryOfInformation.lab1.Service
             return true;
         }
 
-		public static uint FastPower(uint @base, uint exponent)
+		public static HashSet<uint> GetMuls(uint x)
 		{
-			if (@base != 0) // Сравнение вещественного числа с 0 не вполне корректно, но взято для простоты
-			{
-				uint power = 1;
-				while (exponent > 0)                    // Пока текущее значение показателя степени не равно 0:
-				{
-					if ((exponent & 1) != 0)            // Если оно нечётно,
-						power *= @base;                 // результат умножается на текущее значение основания.
-					exponent >>= 1;                     // Показатель степени делится на 2.
-					@base *= @base;                     // Основание возводится в квадрат.
-				}
-				return power;
-            }
-            else
+			HashSet<uint> set = new HashSet<uint>();
+			for(uint i =2; i < x;)
             {
-				return 0;
+				if(x % i == 0)
+                {
+					set.Add(i);
+					x /= i;
+                }
+                else
+                {
+					i++;
+                }
             }
+			set.Add(x);
+			return set;
+        }
+
+		static ulong Eyler(ulong n)
+		{
+			ulong res = n, en = Convert.ToUInt64(Math.Sqrt(n) + 1);
+			for (ulong i = 2; i <= en; i++)
+				if ((n % i) == 0)
+				{
+					while ((n % i) == 0)
+						n /= i;
+					res -= (res / i);
+				}
+			if (n > 1) res -= (res / n);
+			return res;
+		}
+
+		public static List<uint> GetRoots(uint p)
+        {
+			int dump2 = 0, dump1 = 0;
+
+			uint euler = (uint)Eyler(p);
+
+			var muls = GetMuls(euler);
+			List<uint> roots = new List<uint>();
+
+			for (uint g = 1; g < p; g++)
+			{
+				if (FastPower(g, euler, p) != 1) continue;
+				//if (gcd(p, g, ref dump1, ref dump2) != 1) continue;
+
+				//if (p > 2 && (FastPower(g, euler / 2, p) == 1))
+				//	continue;
+				bool breakMain = false;
+
+
+				foreach (var mul in muls)
+				{
+					if (FastPower(g, euler / mul, p) == 1)
+					{
+						breakMain = true;
+						break;
+					}
+				}
+
+				if (!breakMain) roots.Add(g);
+			}
+			return roots;
+        }
+
+		public static uint FastPower(uint a, uint n, uint m)
+		{
+			if (n == 0)
+				return 1 % m;
+			if (n % 2 == 1)
+				return (FastPower(a, n - 1, m) * a) % m;
+			else
+				return FastPower((a * a) % m, n / 2, m);
 		}
 
 		public static uint gcd(uint a, uint b, ref int x,ref int y)
