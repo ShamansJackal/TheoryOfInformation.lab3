@@ -70,10 +70,9 @@ namespace TheoryOfInformation.lab1.Encryptions.Keys
 
         public byte _decp(IEnumerable<byte> eml, int yp, int yq)
         {
-            byte sss = 0;
             long tmp = 0;
-            foreach(long b in eml)
-                tmp += b << (8 * sss);
+            foreach (long bts in eml)
+                tmp = bts + (tmp << 8);
 
             uint D = (uint)((b * b + 4 * tmp) % n);
 
