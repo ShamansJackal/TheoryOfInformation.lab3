@@ -21,7 +21,7 @@ namespace TheoryOfInformation.lab3
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IKey _key;
+        private ElGamal _key;
 
         private bool _encode = false;
         private bool Encode { get => _encode; set { if (fileUnit_in != null) fileUnit_in.encrypt = value; _encode = value; } }
@@ -30,8 +30,6 @@ namespace TheoryOfInformation.lab3
 
         public MainWindow()
         {
-            _key = new ElGamal(5,2,2);
-
             InitializeComponent();
             encCheck.IsChecked = true;
         }
@@ -40,51 +38,49 @@ namespace TheoryOfInformation.lab3
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            //MainBTN.IsEnabled = false;
-            //await Task.Delay(100);
-            //await EncodeFucntion();
-            //MainBTN.IsEnabled = true;
+            MainBTN.IsEnabled = false;
+            await Task.Delay(100);
+            await EncodeFucntion();
+            MainBTN.IsEnabled = true;
         }
 
-        //private async Task EncodeFucntion()
-        //{
-        //    ulong beginState = Convert.ToUInt64("", 2);
+        private async Task EncodeFucntion()
+        {
+            string path = fileUnit_in.OutputFile.Text;
+            byte[] bytesRaw;
 
-        //    string path = fileUnit_in.OutputFile.Text;
-        //    byte[] bytesRaw;
+            using (FileStream SourceStream = new FileStream(path, FileMode.Open))
+            {
+                bytesRaw = new byte[SourceStream.Length];
+                await SourceStream.ReadAsync(bytesRaw, 0, (int)SourceStream.Length);
+            }
+            if (!_encode)
+            {
+               
 
-        //    using (FileStream SourceStream = new FileStream(path, FileMode.Open))
-        //    {
-        //        bytesRaw = new byte[SourceStream.Length];
-        //        await SourceStream.ReadAsync(bytesRaw, 0, (int)SourceStream.Length);
-        //    }
+                string filename = path.Replace(".data", "");
+                filename = filename.Insert(filename.LastIndexOf('\\') + 1, "dec_");
+                File.WriteAllBytes(filename, null);
+            }
+            else
+            {
+                var result = _key.Encrypte(bytesRaw, out byte res);
 
-        //    byte[] bytes = _encryption.BuildKeyForFile(beginState, (ulong)bytesRaw.Length);
+                File.WriteAllBytes(path + ".data", result);
+            }
 
-        //    byte[] result = _encryption.Encrypte(bytesRaw, bytes);
-        //    if (!_encode)
-        //    {
-        //        string filename = path.Replace(".data", "");
-        //        filename = filename.Insert(filename.LastIndexOf('\\') + 1, "dec_");
-        //        File.WriteAllBytes(filename, result);
-        //    }
-        //    else
-        //    {
-        //        File.WriteAllBytes(path + ".data", result);
-        //    }
+            //if (_visualisation)
+            //{
+            //    string source = string.Join("", bytesRaw.Take(300).Select(x => ByteToStr(x)));
+            //    string keyStr = string.Join("", bytes.Take(300).Select(x => ByteToStr(x)));
+            //    string resStr = string.Join("", result.Take(300).Select(x => ByteToStr(x)));
+            //    string reportStr = string.Join("\n", source, keyStr, resStr);
 
-        //    if (_visualisation)
-        //    {
-        //        string source = string.Join("", bytesRaw.Take(300).Select(x => ByteToStr(x)));
-        //        string keyStr = string.Join("", bytes.Take(300).Select(x => ByteToStr(x)));
-        //        string resStr = string.Join("", result.Take(300).Select(x => ByteToStr(x)));
-        //        string reportStr = string.Join("\n", source, keyStr, resStr);
-
-        //        ReportWindow report = new ReportWindow();
-        //        report.outputText.Text = reportStr;
-        //        report.Show();
-        //    }
-        //}
+            //    ReportWindow report = new ReportWindow();
+            //    report.outputText.Text = reportStr;
+            //    report.Show();
+            //}
+        }
 
         private void keyBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -99,5 +95,40 @@ namespace TheoryOfInformation.lab3
         }
 
         bool IsGood(char c) => c > 47 && c < 59;
+
+        private void BuildBTN_Click(object sender, RoutedEventArgs e)
+        {
+            BuildBTN.IsEnabled = false;
+            try
+            {
+                _key = new ElGamal(uint.Parse(pBox.Text), uint.Parse(xBox.Text), uint.Parse(kBox.Text));
+                gBox.ItemsSource = _key.roots;
+                gBox.SelectedIndex = 0;
+                MainBTN.IsEnabled = true;
+            } catch (Exception exp) {
+                BuildBTN.IsEnabled = true;
+                MessageBox.Show(exp.Message);
+            }
+        }
+
+        private void ResetAll()
+        {
+            MainBTN.IsEnabled = false;
+            BuildBTN.IsEnabled = true;
+            gBox.ItemsSource = null;
+            _key = null;
+        }
+
+        private void gBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ComboBox)sender).SelectedIndex<0) return; 
+            int s = ((ComboBox)sender).SelectedIndex;
+            _key.ChangeG(s);
+        }
+
+        private void pBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ResetAll();
+        }
     }
 }

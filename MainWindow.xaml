@@ -20,14 +20,20 @@
                 </StackPanel>
             </Border>
 
-            <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1"  Width="120" DockPanel.Dock="Right" Margin="4">
+            <StackPanel DockPanel.Dock="Right">
+            <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1"  Width="120"  Margin="4">
                 <StackPanel>
                     <Label FontSize="12" Content="Вывод:" Height="26"/>
                     <CheckBox Content="Визуализация:" IsChecked="{Binding ElementName=mainWindow, Path=_visualisation, Mode=TwoWay}"/>
                 </StackPanel>
             </Border>
+                <ComboBox SelectionChanged="gBox_SelectionChanged" Name="gBox" Margin="4"/>
+            </StackPanel>
 
-            <Button x:Name="MainBTN" DockPanel.Dock="Left" Content="Обработать" Click="Button_Click" Margin="4" Padding="4"></Button>
+            <StackPanel DockPanel.Dock="Left">
+                <Button x:Name="BuildBTN" Content="Создать ключ" Click="BuildBTN_Click" Margin="4" Padding="4"/>
+                <Button x:Name="MainBTN"  Content="Обработать" Click="Button_Click" Margin="4" Padding="4" IsEnabled="False"/>
+            </StackPanel>
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -44,9 +50,9 @@
                 <Label Content="x:" Grid.Row="1" Grid.Column="0"/>
                 <Label Content="k:" Grid.Row="2" Grid.Column="0"/>
                 
-                <TextBox x:Name="pBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="0" Grid.Column="1"/>
-                <TextBox x:Name="xBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="1" Grid.Column="1"/>
-                <TextBox x:Name="kBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="2" Grid.Column="1"/>
+                <TextBox x:Name="pBox" TextChanged="pBox_TextChanged" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="0" Grid.Column="1"/>
+                <TextBox x:Name="xBox" TextChanged="pBox_TextChanged" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="1" Grid.Column="1"/>
+                <TextBox x:Name="kBox" TextChanged="pBox_TextChanged" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="2" Grid.Column="1"/>
             </Grid>
         </DockPanel>
 

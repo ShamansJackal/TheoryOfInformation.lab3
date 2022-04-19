@@ -21,14 +21,14 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
         {
             if (!IsPrime(p)) throw new Exception($"p:{p} не являеться простым");
             else if (x>=p-1 || x < 2) throw new Exception($"x:{x} не находиться в (1, p-1:{p-1})");
-            else if (k>=p-1 || k < 2) throw new Exception($"k:{k} не находиться в (1, p-1:{p-1})");
+            else if (k>=p-1 || k < 2 || gcd(k, p-1)!=1) throw new Exception($"k:{k} не находиться в (1, p-1:{p-1}) или не являеться взаимно простым с p-1:{p-1}");
 
             this.p = p;
             this.x = x;
             this.k = k;
 
             roots = GetRoots(p);
-            ChangeG(new Random().Next(roots.Count));
+            ChangeG(0);
         }
 
         public void ChangeG(int index)
@@ -42,9 +42,26 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
             throw new NotImplementedException();
         }
 
-        public IEnumerable<long> Encrypte(byte[] file, out byte resize)
+        public byte[] Encrypte(byte[] file, out byte resize)
         {
-            throw new NotImplementedException();
+            uint p_copy = p;
+            resize = 0;
+            while (p_copy > 0)
+            {
+                resize++;
+                p_copy >>= 8;
+            }
+
+
+            byte[] result = new byte[file.Length<<1];
+            for(int i = 1; i < file.Length; i++)
+            {
+                uint a = FastPower(g, k, p);
+                uint b = FastPower(y, k, p) * file[i] % p;
+                file[i >> 1] = (byte)a;
+                file[i >> 1 + 1] = (byte)b;
+            }
+            return result;
         }
     }
 }

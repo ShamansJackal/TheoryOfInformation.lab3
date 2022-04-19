@@ -97,7 +97,7 @@ namespace TheoryOfInformation.lab3.Service
 				return FastPower((a * a) % m, n / 2, m);
 		}
 
-		public static uint gcd(uint a, uint b, ref int x,ref int y)
+		public static uint gcd_ext(uint a, uint b, ref int x,ref int y)
 		{
 			if (a == 0)
 			{
@@ -105,10 +105,20 @@ namespace TheoryOfInformation.lab3.Service
 				return b;
 			}
 			int x1 = 0, y1 = 0;
-			uint d = gcd(b % a, a, ref x1, ref y1);
+			uint d = gcd_ext(b % a, a, ref x1, ref y1);
 			x = (int)(y1 - (b / a) * x1);
 			y = x1;
 			return d;
+		}
+
+		public static uint gcd(uint a, uint b)
+		{
+			while (a != 0 && b != 0)
+				if (a > b)
+					a %= b;
+				else
+					b %= a;
+			return a | b;
 		}
 	}
 }
