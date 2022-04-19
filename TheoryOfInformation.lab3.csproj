@@ -57,6 +57,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Service\CustomMath.cs" />
+    <Compile Include="Encryptions\Keys\IKey.cs" />
     <Compile Include="Encryptions\Models\IEncryption.cs" />
     <Compile Include="Encryptions\Models\LFRS_fast.cs" />
     <Compile Include="Encryptions\Models\LFRS.cs" />
