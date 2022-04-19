@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,14 +53,15 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
                 p_copy >>= 8;
             }
 
+            uint a = FastPower(g, k, p);
+            uint mul = FastPower(y, k, p);
 
             byte[] result = new byte[file.Length<<1];
-            for(int i = 1; i < file.Length; i++)
+            for(int i = 0; i < file.Length; i++)
             {
-                uint a = FastPower(g, k, p);
-                uint b = FastPower(y, k, p) * file[i] % p;
-                file[i >> 1] = (byte)a;
-                file[i >> 1 + 1] = (byte)b;
+                uint b = (mul * file[i]) % p;
+                result[i << 1] = (byte)a;
+                result[(i << 1) + 1] = (byte)b;
             }
             return result;
         }
