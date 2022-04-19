@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheoryOfInformation.lab1.Encryptions.Keys
+namespace TheoryOfInformation.lab3.Encryptions.Keys
 {
     public interface IKey
     {

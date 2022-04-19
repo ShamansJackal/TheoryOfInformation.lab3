@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Encryptions\Keys\ElGamal.cs" />
     <Compile Include="Service\CustomMath.cs" />
     <Compile Include="Encryptions\Keys\IKey.cs" />
     <Compile Include="Encryptions\Models\IEncryption.cs" />
