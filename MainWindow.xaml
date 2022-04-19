@@ -41,12 +41,12 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Content="p:" Grid.Row="0" Grid.Column="0"/>
-                <Label Content="q:" Grid.Row="1" Grid.Column="0"/>
-                <Label Content="b:" Grid.Row="2" Grid.Column="0"/>
+                <Label Content="x:" Grid.Row="1" Grid.Column="0"/>
+                <Label Content="k:" Grid.Row="2" Grid.Column="0"/>
                 
                 <TextBox x:Name="pBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="0" Grid.Column="1"/>
-                <TextBox x:Name="qBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="1" Grid.Column="1"/>
-                <TextBox x:Name="bBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="2" Grid.Column="1"/>
+                <TextBox x:Name="xBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="1" Grid.Column="1"/>
+                <TextBox x:Name="kBox" MaxLines="1" PreviewTextInput="keyBox_PreviewTextInput" Margin="4" FontSize="16" TextWrapping="NoWrap" AcceptsReturn="False"  Grid.Row="2" Grid.Column="1"/>
             </Grid>
         </DockPanel>
 
