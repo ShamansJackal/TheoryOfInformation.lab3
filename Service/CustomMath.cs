@@ -40,7 +40,7 @@ namespace TheoryOfInformation.lab3.Service
 			return set;
         }
 
-		static ulong Eyler(ulong n)
+		public static ulong Eyler(ulong n)
 		{
 			ulong res = n, en = Convert.ToUInt64(Math.Sqrt(n) + 1);
 			for (ulong i = 2; i <= en; i++)

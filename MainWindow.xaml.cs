@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TheoryOfInformation.lab1.Service;
 using TheoryOfInformation.lab3.Encryptions.Keys;
 using TheoryOfInformation.lab3.Encryptions.Models;
 using TheoryOfInformation.lab3.Service;
@@ -56,15 +57,20 @@ namespace TheoryOfInformation.lab3
             }
             if (!_encode)
             {
-               
+                var resultUINT = Resizer.FromFile(bytesRaw, _key.resize);
+                var resultTMP = _key.Dencrypte(resultUINT);
+                var result = Resizer.ToFile(resultTMP, 1);
+
 
                 string filename = path.Replace(".data", "");
                 filename = filename.Insert(filename.LastIndexOf('\\') + 1, "dec_");
-                File.WriteAllBytes(filename, null);
+                File.WriteAllBytes(filename, result);
             }
             else
             {
-                var result = _key.Encrypte(bytesRaw, out byte res);
+                var resultUINT = Resizer.FromFile(bytesRaw, 1);
+                var resultTMP = _key.Encrypte(resultUINT);
+                var result = Resizer.ToFile(resultTMP, _key.resize);
 
                 File.WriteAllBytes(path + ".data", result);
             }

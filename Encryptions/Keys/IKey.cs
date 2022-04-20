@@ -8,7 +8,7 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
 {
     public interface IKey
     {
-        byte[] Encrypte(byte[] file, out byte resize);
-        byte[] Dencrypte(byte[] file);
+        List<uint> Encrypte(List<uint> file);
+        List<uint> Dencrypte(List<uint> file);
     }
 }

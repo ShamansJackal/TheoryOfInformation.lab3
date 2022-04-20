@@ -16,6 +16,8 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
         public uint y { get; private set; }
         public uint g { get; private set; }
 
+        public byte resize { get; private set; }
+
         public IReadOnlyList<uint> roots { get; private set; }
 
         public ElGamal(uint p, uint x, uint k)
@@ -28,6 +30,13 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
             this.x = x;
             this.k = k;
 
+            uint p_copy = p;
+            while (p_copy > 0)
+            {
+                resize++;
+                p_copy >>= 8;
+            }
+
             roots = GetRoots(p);
             ChangeG(0);
         }
@@ -38,32 +47,32 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
             g = roots[index];
             y = FastPower(g, x, p);
         }
-        public byte[] Dencrypte(byte[] file)
+        public List<uint> Dencrypte(List<uint> file)
         {
-            throw new NotImplementedException();
-        }
+            uint[] result = new uint[file.Count >> 1];
 
-        public byte[] Encrypte(byte[] file, out byte resize)
-        {
-            uint p_copy = p;
-            resize = 0;
-            while (p_copy > 0)
+            for (int i = 0; i < result.Length; i++)
             {
-                resize++;
-                p_copy >>= 8;
+                ulong fileSeg = file[(i << 1) + 1] * FastPower(file[i << 1], x * (uint)(Eyler(p) - 1), p) % p;
+                result[i] = (uint)fileSeg;
             }
 
+            return result.ToList();
+        }
+
+        public List<uint> Encrypte(List<uint> file)
+        {
             uint a = FastPower(g, k, p);
             uint mul = FastPower(y, k, p);
 
-            byte[] result = new byte[file.Length<<1];
-            for(int i = 0; i < file.Length; i++)
+            uint[] result = new uint[file.Count<<1];
+            for(int i = 0; i < file.Count; i++)
             {
                 uint b = (mul * file[i]) % p;
-                result[i << 1] = (byte)a;
-                result[(i << 1) + 1] = (byte)b;
+                result[i << 1] = a;
+                result[(i << 1) + 1] = b;
             }
-            return result;
+            return result.ToList();
         }
     }
 }
