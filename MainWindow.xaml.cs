@@ -55,37 +55,45 @@ namespace TheoryOfInformation.lab3
                 bytesRaw = new byte[SourceStream.Length];
                 await SourceStream.ReadAsync(bytesRaw, 0, (int)SourceStream.Length);
             }
-            if (!_encode)
-            {
-                var resultUINT = Resizer.FromFile(bytesRaw, _key.resize);
-                var resultTMP = _key.Dencrypte(resultUINT);
-                var result = Resizer.ToFile(resultTMP, 1);
 
-
-                string filename = path.Replace(".data", "");
-                filename = filename.Insert(filename.LastIndexOf('\\') + 1, "dec_");
-                File.WriteAllBytes(filename, result);
-            }
-            else
+            string reportStr;
+            if (_encode)
             {
                 var resultUINT = Resizer.FromFile(bytesRaw, 1);
                 var resultTMP = _key.Encrypte(resultUINT);
                 var result = Resizer.ToFile(resultTMP, _key.resize);
 
+                string source = string.Join(" ", resultUINT.Take(300).Select(x => $"({x:d9})"));
+                string resStr = "";
+                for (int i = 0; i < resultTMP.Take(600).Count(); i += 2)
+                    resStr += $"({resultTMP[i]:d4},{resultTMP[i + 1]:d4}) ";
+                reportStr = string.Join("\n", _key.y, source, resStr);
+
                 File.WriteAllBytes(path + ".data", result);
             }
+            else
+            {
+                var resultUINT = Resizer.FromFile(bytesRaw, _key.resize);
+                var resultTMP = _key.Dencrypte(resultUINT);
+                var result = Resizer.ToFile(resultTMP, 1);
 
-            //if (_visualisation)
-            //{
-            //    string source = string.Join("", bytesRaw.Take(300).Select(x => ByteToStr(x)));
-            //    string keyStr = string.Join("", bytes.Take(300).Select(x => ByteToStr(x)));
-            //    string resStr = string.Join("", result.Take(300).Select(x => ByteToStr(x)));
-            //    string reportStr = string.Join("\n", source, keyStr, resStr);
+                string resStr = string.Join(" ", resultTMP.Take(300).Select(x => $"({x:d9})"));
+                string source = "";
+                for (int i=0; i< resultUINT.Take(600).Count(); i += 2)
+                    source += $"({resultUINT[i]:d4},{resultUINT[i + 1]:d4}) ";
+                reportStr = string.Join("\n", _key.y, source, resStr);
 
-            //    ReportWindow report = new ReportWindow();
-            //    report.outputText.Text = reportStr;
-            //    report.Show();
-            //}
+                string filename = path.Replace(".data", "");
+                filename = filename.Insert(filename.LastIndexOf('\\') + 1, "dec_");
+                File.WriteAllBytes(filename, result);
+            }
+
+            if (_visualisation)
+            {
+                ReportWindow report = new ReportWindow();
+                report.outputText.Text = reportStr;
+                report.Show();
+            }
         }
 
         private void keyBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -109,6 +117,7 @@ namespace TheoryOfInformation.lab3
             {
                 _key = new ElGamal(uint.Parse(pBox.Text), uint.Parse(xBox.Text), uint.Parse(kBox.Text));
                 gBox.ItemsSource = _key.roots;
+                CounterLBL.Content = $"Кол-во: {_key.roots.Count}";
                 gBox.SelectedIndex = 0;
                 MainBTN.IsEnabled = true;
             } catch (Exception exp) {
@@ -121,6 +130,7 @@ namespace TheoryOfInformation.lab3
         {
             MainBTN.IsEnabled = false;
             BuildBTN.IsEnabled = true;
+            CounterLBL.Content = $"Кол-во: {0}";
             gBox.ItemsSource = null;
             _key = null;
         }

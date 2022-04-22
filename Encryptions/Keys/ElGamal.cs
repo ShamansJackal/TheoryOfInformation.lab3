@@ -51,9 +51,11 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
         {
             uint[] result = new uint[file.Count >> 1];
 
+            uint power = x * (uint)(Eyler(p) - 1);
+
             for (int i = 0; i < result.Length; i++)
             {
-                ulong fileSeg = file[(i << 1) + 1] * FastPower(file[i << 1], x * (uint)(Eyler(p) - 1), p) % p;
+                ulong fileSeg = file[(i << 1) + 1] * FastPower(file[i << 1], power, p) % p;
                 result[i] = (uint)fileSeg;
             }
 

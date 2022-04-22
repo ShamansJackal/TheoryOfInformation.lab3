@@ -21,13 +21,22 @@
             </Border>
 
             <StackPanel DockPanel.Dock="Right">
-            <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1"  Width="120"  Margin="4">
+            <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1"  Width="180"  Margin="4">
                 <StackPanel>
                     <Label FontSize="12" Content="Вывод:" Height="26"/>
                     <CheckBox Content="Визуализация:" IsChecked="{Binding ElementName=mainWindow, Path=_visualisation, Mode=TwoWay}"/>
                 </StackPanel>
             </Border>
-                <ComboBox SelectionChanged="gBox_SelectionChanged" Name="gBox" Margin="4"/>
+                <DockPanel LastChildFill="True">
+                    <Label Name="CounterLBL" Width="90" Content="Кол-во: 0"/>
+                    <ComboBox SelectionChanged="gBox_SelectionChanged" Name="gBox" Margin="4">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+                </DockPanel>
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Left">

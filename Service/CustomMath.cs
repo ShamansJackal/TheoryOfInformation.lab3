@@ -56,12 +56,10 @@ namespace TheoryOfInformation.lab3.Service
 
 		public static List<uint> GetRoots(uint p)
         {
-			int dump2 = 0, dump1 = 0;
-
 			uint euler = (uint)Eyler(p);
 
 			var muls = GetMuls(euler);
-			List<uint> roots = new List<uint>();
+			List<uint> roots = new List<uint>((int)(euler / 2));
 
 			for (uint g = 1; g < p; g++)
 			{
@@ -82,7 +80,8 @@ namespace TheoryOfInformation.lab3.Service
 					}
 				}
 
-				if (!breakMain) roots.Add(g);
+				if (!breakMain)
+					roots.Add(g);
 			}
 			return roots;
         }
