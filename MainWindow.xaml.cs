@@ -114,5 +114,14 @@ namespace TheoryOfInformation.lab3
             else
                 return false;
         }
+
+        private void pBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            bool a1 = qBox != null ? qBox.Text.Length > 0 : false;
+            bool a2 = pBox != null ? pBox.Text.Length > 0 : false;
+            bool a3 = bBox != null ? bBox.Text.Length > 0 : false;
+            bool isact = a1 && a2 && a3;
+            MainBTN.IsEnabled = isact;
+        }
     }
 }
