@@ -1,89 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using static TheoryOfInformation.lab1.Service.CustomMath;
+using static TheoryOfInformation.lab3.Service.CustomMath;
 
-namespace TheoryOfInformation.lab1.Encryptions.Keys
+namespace TheoryOfInformation.lab3.Encryptions.Keys
 {
     public class RabinKey : IKey
     {
         public uint q { get; }
         public uint p { get; }
-        public long b { get; }
-        public long n { get; }
+        public uint b { get; }
+        public uint n { get; }
+        private byte _resize = 0;
 
-        public RabinKey(uint p, uint q, long b)
+        public byte resize => _resize;
+
+        public RabinKey(uint p, uint q, uint b)
         {
             if (!IsPrime(q)) throw new Exception($"{q} не являеться простым");
             else if (!IsPrime(p)) throw new Exception($"{p} не являеться простым");
-            else if(b>=p*q) throw new Exception($"b не может быть больше чем q*p");
             else if(p % 4 != 3 || q % 4 != 3) throw new Exception($"должно выполняться условие: p ≡ q ≡ 3 mod 4");
+            else if(b>=p*q) throw new Exception($"b не может быть больше чем q*p");
 
             this.q = q;
             this.p = p;
             this.b = b;
             this.n = q*p;
+
+            long tmp = n;
+            while (tmp > 0)
+            {
+                tmp >>= 8;
+                _resize++;
+            }
         }
 
-        public byte[] Dencrypte(byte[] file)
+        public List<uint> Dencrypte(List<uint> file)
         {
-            long len = n;
-            byte mul = 0;
-            while (len > 0)
-            {
-                len >>= 8;
-                mul++;
-            }
+            List<uint> result = new List<uint>(file.Count);
+                foreach (var symb in file)
+                {
+                    uint D = (b * b + 4 * symb) % n;
 
-            int yp = 0, yq = yp;
-            var s = gcd(p, q, ref yp, ref yq);
+                    uint mp = FastPowerModul(D, (p + 1) / 4, p);
+                    uint mq = FastPowerModul(D, (q + 1) / 4, q);
 
-            List<byte> buffer = new List<byte>();
-            for(uint i=0; i<file.Length; i+=mul)
-            {
-                buffer.Add(_decp(file.Skip((int)i).Take(mul), yp, yq));
-            }
+                    int yp = 0, yq = 0;
+                    gcd_ext(p, q, ref yp, ref yq);
 
-            return buffer.ToArray();
+                    long d1 = mod(yp * p * mq + yq * q * mp, n);
+                    long d2 = n - d1;
+                    long d3 = mod(yp * p * mq - yq * q * mp, n);
+                    long d4 = n - d3;
+                    List<long> ds = new List<long>() { d1, d2, d3, d4 };
+
+                    foreach (var di in ds)
+                    {
+                        long mi = 0;
+                        if ((di - b) % 2 == 0)
+                            mi = mod((di - b) / 2, n);
+                        else
+                            mi = mod((n + di - b) / 2, n);
+
+                        if (mi < 256 && mi > -1)
+                        {
+                            result.Add((uint)mi);
+                            break;
+                        }
+                    }
+                }
+                return result;
         }
 
-        public IEnumerable<long> Encrypte(byte[] file, out byte resize)
+        public List<uint> Encrypte(List<uint> file)
         {
-            long len = n;
-            byte mul = 0;
-
-            while (len > 0)
+            List<uint> result = new List<uint>(file.Count);
+            foreach(var symb in file)
             {
-                len >>= 8;
-                mul++;
+                uint tmp = (symb % n * (symb + b) % n) % n;
+                result.Add(tmp);
             }
-
-            List<long> buffer = new List<long>();
-            foreach(byte elm in file)
-                buffer.Add(elm * (elm + b) % n);
-            resize = mul;
-
-            return buffer;
-        }
-
-        public byte _decp(IEnumerable<byte> eml, int yp, int yq)
-        {
-            long tmp = 0;
-            foreach (long bts in eml)
-                tmp = bts + (tmp << 8);
-
-            uint D = (uint)((b * b + 4 * tmp) % n);
-
-            uint Mp = FastPower(D, (p + 1) / 4) % p;
-            uint Mq = FastPower(D, (q + 1) / 4) % q;
-
-            long d1 = (yp * p * Mq + yq * q * Mp) % n;
-            long d2 = n - d1;
-            long d3 = (yp * p * Mq - yq * q * Mp) % n;
-            long d4 = n - d3;
-            return 0;
+            return result;
         }
     }
 }

@@ -59,17 +59,14 @@
     </ApplicationDefinition>
     <Compile Include="Encryptions\Keys\IKey.cs" />
     <Compile Include="Encryptions\Keys\RabinKey.cs" />
-    <Compile Include="Encryptions\Models\IEncryption.cs" />
-    <Compile Include="Encryptions\Models\LFRS_fast.cs" />
-    <Compile Include="Encryptions\Models\LFRS.cs" />
-    <Compile Include="Encryptions\TextWorker.cs" />
     <Compile Include="FileWindow.xaml.cs">
       <DependentUpon>FileWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReportWindow.xaml.cs">
       <DependentUpon>ReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Service\CustomeMath.cs" />
+    <Compile Include="Service\CustomMath.cs" />
+    <Compile Include="Service\Resizer.cs" />
     <Page Include="FileWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TheoryOfInformation.lab1.Encryptions.Keys
+namespace TheoryOfInformation.lab3.Encryptions.Keys
 {
     public interface IKey
     {
-        IEnumerable<long> Encrypte(byte[] file, out byte resize);
-        byte[] Dencrypte(byte[] file);
+        List<uint> Encrypte(List<uint> file);
+        List<uint> Dencrypte(List<uint> file);
+
+        byte resize { get; }
     }
 }

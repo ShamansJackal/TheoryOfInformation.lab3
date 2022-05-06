@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using TheoryOfInformation.lab3.Encryptions.Models;
 
 namespace TheoryOfInformation.lab3
 {
@@ -27,7 +26,7 @@ namespace TheoryOfInformation.lab3
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Multiselect = false,
-                Filter = encrypt ? "All files (*.*)|*.*" : "Encrypted files (*.data)|*.data|All files (*.*)|*.*",
+                Filter = encrypt ? "All files (*.*)|*.*" : "Encrypted files (*.enc)|*.enc|All files (*.*)|*.*",
             };
             if (openFileDialog.ShowDialog() == true)
             {

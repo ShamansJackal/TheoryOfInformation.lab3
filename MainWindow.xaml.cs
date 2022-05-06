@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TheoryOfInformation.lab1.Encryptions.Keys;
-using TheoryOfInformation.lab3.Encryptions;
-using TheoryOfInformation.lab3.Encryptions.Models;
-using static TheoryOfInformation.lab3.Encryptions.TextWorker;
+using TheoryOfInformation.lab3.Encryptions.Keys;
+using TheoryOfInformation.lab3.Service;
 
 namespace TheoryOfInformation.lab3
 {
@@ -40,7 +38,7 @@ namespace TheoryOfInformation.lab3
         {
             try
             {
-                _key = new RabinKey(uint.Parse(pBox.Text), uint.Parse(qBox.Text), long.Parse(bBox.Text));
+                _key = new RabinKey(uint.Parse(pBox.Text), uint.Parse(qBox.Text), uint.Parse(bBox.Text));
             }
             catch(Exception err)
             {
@@ -65,39 +63,36 @@ namespace TheoryOfInformation.lab3
                 await SourceStream.ReadAsync(bytesRaw, 0, (int)SourceStream.Length);
             }
 
-            if (!_encode)
+            if (_encode)
             {
-                var result = _key.Dencrypte(bytesRaw);
-                string filename = path.Replace(".data", "");
-                filename = filename.Insert(filename.LastIndexOf('\\') + 1, "dec_");
-                File.WriteAllBytes(filename, null);
-            }
-            else
-            {
-                var result = _key.Encrypte(bytesRaw, out byte resize);
+                var resultUINT = Resizer.FromFile(bytesRaw, 1);
+                var resultTMP = _key.Encrypte(resultUINT);
+                var result = Resizer.ToFile(resultTMP, _key.resize);
+
+
+                File.WriteAllBytes(path + ".enc", result);
 
                 if (_visualisation)
                 {
+                    string source = string.Join(" ", resultUINT.Take(300).Select(x => $"{x:d10}"));
+                    string resStr = string.Join(" ", resultTMP.Take(300).Select(x => $"{x:d10}"));
+                    string reportStr = string.Join("\n", source, resStr);
+
                     ReportWindow report = new ReportWindow();
-                    report.outputText.Text = string.Join(" ", result);
+                    report.outputText.Text = reportStr;
                     report.Show();
                 }
-
-                var resBytes = result.SelectMany(x => BitConverter.GetBytes(x).Take(resize).Reverse()).ToArray();
-                File.WriteAllBytes(path + ".data", resBytes);
             }
+            else
+            {
+                var resultUINT = Resizer.FromFile(bytesRaw, _key.resize);
+                var resultTMP = _key.Dencrypte(resultUINT);
+                var result = Resizer.ToFile(resultTMP, 1);
 
-            //if (_visualisation)
-            //{
-            //    string source = string.Join("", bytesRaw.Take(300).Select(x => ByteToStr(x)));
-            //    string keyStr = string.Join("", bytes.Take(300).Select(x => ByteToStr(x)));
-            //    string resStr = string.Join("", result.Take(300).Select(x => ByteToStr(x)));
-            //    string reportStr = string.Join("\n", source, keyStr, resStr);
-
-            //    ReportWindow report = new ReportWindow();
-            //    report.outputText.Text = reportStr;
-            //    report.Show();
-            //}
+                string filename = path.Replace(".enc", "");
+                filename = filename.Insert(filename.LastIndexOf('\\') + 1, "dec_");
+                File.WriteAllBytes(filename, result);
+            }
         }
 
         private void keyBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
