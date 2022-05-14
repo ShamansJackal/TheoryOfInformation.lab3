@@ -48,12 +48,12 @@ namespace TheoryOfInformation.lab3.Encryptions.Keys
                     uint mp = FastPowerModul(D, (p + 1) / 4, p);
                     uint mq = FastPowerModul(D, (q + 1) / 4, q);
 
-                    int yp = 0, yq = 0;
-                    gcd_ext(p, q, ref yp, ref yq);
 
-                    long d1 = mod(yp * p * mq + yq * q * mp, n);
+                    var muls = gcd_ext((int)p, (int)q);
+
+                    long d1 = mod(muls.Item1 * p * mq + muls.Item2 * q * mp, n);
                     long d2 = n - d1;
-                    long d3 = mod(yp * p * mq - yq * q * mp, n);
+                    long d3 = mod(muls.Item1 * p * mq - muls.Item2 * q * mp, n);
                     long d4 = n - d3;
                     List<long> ds = new List<long>() { d1, d2, d3, d4 };
 

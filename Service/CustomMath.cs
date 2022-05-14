@@ -21,11 +21,6 @@ namespace TheoryOfInformation.lab3.Service
 			return true;
 		}
 
-		public static int mod(int x, int m)
-		{
-			return (x % m + m) % m;
-		}
-
 		public static long mod(long x, long m)
 		{
 			return (x % m + m) % m;
@@ -33,8 +28,8 @@ namespace TheoryOfInformation.lab3.Service
 
 		public static uint FastPowerModul(uint Number, uint Pow, uint Mod)
 		{
-			Int64 Result = 1;
-			Int64 Bit = Number % Mod;
+			long Result = 1;
+			long Bit = Number % Mod;
 
 			while (Pow > 0)
 			{
@@ -50,18 +45,23 @@ namespace TheoryOfInformation.lab3.Service
 			return (uint)Result;
 		}
 
-		public static uint gcd_ext(uint a, uint b, ref int x, ref int y)
+		public static (int, int) gcd_ext(int a, int b)
 		{
-			if (a == 0)
-			{
-				x = 0; y = 1;
-				return b;
-			}
-			int x1 = 0, y1 = 0;
-			uint d = gcd_ext(b % a, a, ref x1, ref y1);
-			x = (int)(y1 - (b / a) * x1);
-			y = x1;
-			return d;
+			int d0 = a; int d1 = b;
+			int x0 = 1; int x1 = 0;
+			int y0 = 0; int y1 = 1;
+            while (d1 > 1)
+            {
+				int q = d0 / d1;
+				int d2 = d0 % d1;
+				int x2 = x0 - q * x1;
+				int y2 = y0 - q * y1;
+
+				d0 = d1; d1 = d2;
+				x0 = x1; x1 = x2;
+				y0 = y1; y1 = y2;
+            }
+			return (x1, y1);
 		}
 	}
 }
